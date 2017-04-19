@@ -1,27 +1,31 @@
 <!DOCTYPE html>
-<html ng-app="PollApp">
+<html ng-app="pollApp">
 <head>
     <meta charset="utf-8">
     <title><%= title %></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-resource.min.js"></script>
 </head>
 <body ng-controller="PollListCtrl">
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#/polls"><%= title %></a>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#/polls"><%= title %></a>
+            </div>
         </div>
+    </nav>
+
+    <div class="container">
+        <div ng-view></div>
     </div>
-</nav>
-
-<div class="container">
-    <div ng-view></div>
-</div>
-
-<script src="/javascripts/app.js"></script>
-<script src="/javascripts/controllers.js"></script>
 
 </body>
+
+<script src="/javascripts/app.js"></script>
+<!--<script src="/javascripts/controllers.js"></script>-->
+<script src="/javascripts/services.js"></script>
+
 </html>

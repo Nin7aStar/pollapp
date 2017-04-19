@@ -8,5 +8,5 @@ angular.module('pollServices', ['ngResource'])
 				},
 				isArray: true
 			}
-		});
+		})
 	});
