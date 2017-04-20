@@ -4,7 +4,7 @@ angular.module('pollServices', ['ngResource'])
 			query: {
 				method: 'GET',
 				params: {
-					pollId:	'polls'
+					pollId:	'all'
 				},
 				isArray: true
 			}

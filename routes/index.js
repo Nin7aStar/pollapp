@@ -1,20 +1,23 @@
 var express = require('express');
 var router = express.Router();
 
+var mongoose = require('mongoose');
+var Poll = mongoose.model('Polls');
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Real Time poll application' });
 });
 
 /* View the all polls */
-router.get('/api/polls/all', function (req, res) {
+router.get('/polls/all', function (req, res) {
 	Poll.find({}, 'question', function(error, polls) {
 		res.json(polls);
 	});
 });
 
 /* View the selected poll item */
-router.get('/api/polls/:id', function (req, res) {
+router.get('/polls/:id', function (req, res) {
 	var pollId = req.params.id;
 	Poll.findById(pollId, '', { lean: true }, function (error, poll) {
 		if (poll) {
@@ -48,7 +51,7 @@ router.get('/api/polls/:id', function (req, res) {
 });
 
 /* Create a new poll */
-router.post('/api/polls/new', function (req, res) {
+router.post('/polls/new', function (req, res) {
 	var reqBody = req.body,
 		choices = reqBody.choices.filter(function (v) { return v.text != ''; }),
 		pollObj = {

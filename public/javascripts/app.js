@@ -1,7 +1,8 @@
 var app = angular.module('pollApp', ['pollServices', 'ngRoute']);
+
 app.config(['$routeProvider', function ($routeProvider) {
 	$routeProvider
-		.when('/polls', {
+		.when('/all', {
 			templateUrl: 'partials/list.html',
 			controller:	'PollListCtrl'
 		})
@@ -14,7 +15,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 			controller:	'PollNewCtrl'
 		})
 		.otherwise({
-			redirectTo: '/polls'
+			redirectTo: '/all'
 		});
 	}
 ]);

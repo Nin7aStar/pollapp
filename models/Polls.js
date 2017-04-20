@@ -18,4 +18,4 @@ var pollSchema = new Schema({
 	choices: [choiceSchema]
 });
 
-module.exports = pollSchema;
+mongoose.model('Polls', pollSchema);
