@@ -1,15 +1,18 @@
-var app = angular.module('pollApp', ['pollServices', 'ngRoute']);
+var pollApp = angular.module('pollApp', ['pollServices', 'ngRoute']);
 
-app.config(['$routeProvider', function ($routeProvider) {
+pollApp.config(function ($routeProvider) {
 	$routeProvider
+		// route for the poll list page
 		.when('/all', {
 			templateUrl: 'partials/list.html',
 			controller:	'PollListCtrl'
 		})
+		// route for viewing the poll item
 		.when('/polls/:pollId', {
 			templateUrl: 'partials/item.html',
 			controller:	'PollItemCtrl'
 		})
+		//route for creating a new poll
 		.when('/new', {
 			templateUrl: 'partials/new.html',
 			controller:	'PollNewCtrl'
@@ -18,28 +21,30 @@ app.config(['$routeProvider', function ($routeProvider) {
 			redirectTo: '/all'
 		});
 	}
-]);
+);
 
 /**
  *	Manage the poll list
  */
-app.controller('PollListCtrl', [
+pollApp.controller('PollListCtrl', [
 	'$scope',
 	'Poll',
 	function ($scope, Poll) {
 		$scope.polls = Poll.query();
+		// $scope.polls = [];
 	}
 ]);
 
 /**
  *	vote/view the item of poll
  */
-app.controller('PollItemCtrl', [
+pollApp.controller('PollItemCtrl', [
 	'$scope',
 	'$routeParams',
 	'Poll',
 	function ($scope, $routeParams, Poll) {
 		$scope.poll = Poll.get({pollId: $routeParams.pollId});
+		// $scope.poll = {};
 		$scope.vote = function () {
 			//
 		};
@@ -49,7 +54,7 @@ app.controller('PollItemCtrl', [
 /**
  *	create a new poll question
  */
-app.controller('PollNewCtrl', [
+pollApp.controller('PollNewCtrl', [
 	'$scope',
 	'$location',
 	'Poll',

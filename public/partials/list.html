@@ -20,7 +20,7 @@
 <div class="row" ng-switch on="polls.length">
 	<ul ng-switch-when="0">
 		<li><em>No polls in database. Would you like to
-			<a href="#/new">create one</a>?</em></li>
+			<a href="#/new">Create one</a>?</em></li>
 	</ul>
 	<ul ng-switch-default>
 		<li ng-repeat="poll in polls | filter:query">
