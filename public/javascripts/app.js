@@ -1,6 +1,6 @@
 var pollApp = angular.module('pollApp', ['pollServices', 'ngRoute']);
 
-pollApp.config(function ($routeProvider) {
+pollApp.config(['$routeProvider', function ($routeProvider) {
 	$routeProvider
 		// route for the poll list page
 		.when('/all', {
@@ -20,8 +20,7 @@ pollApp.config(function ($routeProvider) {
 		.otherwise({
 			redirectTo: '/all'
 		});
-	}
-);
+}]);
 
 /**
  *	Manage the poll list
@@ -31,7 +30,6 @@ pollApp.controller('PollListCtrl', [
 	'Poll',
 	function ($scope, Poll) {
 		$scope.polls = Poll.query();
-		// $scope.polls = [];
 	}
 ]);
 
@@ -44,7 +42,6 @@ pollApp.controller('PollItemCtrl', [
 	'Poll',
 	function ($scope, $routeParams, Poll) {
 		$scope.poll = Poll.get({pollId: $routeParams.pollId});
-		// $scope.poll = {};
 		$scope.vote = function () {
 			//
 		};
@@ -59,6 +56,7 @@ pollApp.controller('PollNewCtrl', [
 	'$location',
 	'Poll',
 	function ($scope, $location, Poll) {
+		console.log('New Event');
 		$scope.poll = {
 			question:	'',
 			choices:	[ { text: '' }, { text:	'' }, { text: '' } ]
@@ -82,7 +80,7 @@ pollApp.controller('PollNewCtrl', [
 					var newPoll = new Poll(poll);
 					newPoll.$save(function(p, resp) {
 						if(!p.error) {
-							$location.path('polls');
+							$location.path('all');
 						} else {
 							alert('Could not create poll');
 						}
