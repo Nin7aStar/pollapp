@@ -1,3 +1,4 @@
+'use strict';
 var pollApp = angular.module('pollApp', ['pollServices', 'ngRoute']);
 
 pollApp.config(['$routeProvider', function ($routeProvider) {

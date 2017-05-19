@@ -71,7 +71,7 @@ app.get('/polls/:id', function (req, res) {
 });
 
 /* Create a new poll */
-app.post('/polls/new', function (req, res) {
+app.post('/polls', function (req, res) {
 	var reqBody = req.body,
 		choices = reqBody.choices.filter(function (v) { return v.text != ''; }),
 		pollObj = {

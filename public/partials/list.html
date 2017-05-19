@@ -4,7 +4,7 @@
 
 <div class="row">
 	<div class="col-xs-5">
-		<a href="#/new" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>New Poll</a>
+		<a href="/#!/new" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>New Poll</a>
 	</div>
 	<div class="col-xs-7">
 		<input type="text" class="form-control" ng-model="query" placeholder="Search for a poll">
@@ -20,11 +20,11 @@
 <div class="row" ng-switch on="polls.length">
 	<ul ng-switch-when="0">
 		<li><em>No polls in database. Would you like to
-			<a href="#/new">Create one</a>?</em></li>
+			<a href="/#!/new">Create one</a>?</em></li>
 	</ul>
 	<ul ng-switch-default>
 		<li ng-repeat="poll in polls | filter:query">
-			<a href="#/poll/{{poll._id}}">{{poll.question}}</a>
+			<a href="/#!/polls/{{poll._id}}">{{poll.question}}</a>
 		</li>
 	</ul>
 </div>
