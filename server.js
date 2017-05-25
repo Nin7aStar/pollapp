@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
+var http = require('http');
+// var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -14,6 +15,7 @@ var users = require('./routes/users');
 
 var app = express();
 
+app.set('port', process.env.PORT || 3000);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -28,6 +30,48 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+
+io.sockets.on('connection', function (socket) {
+    console.log('Socket succesfully connected with id: '+socket.id);   // for debug
+    //Socket API for saving a vote
+    socket.on('send:vote', function (data) {
+        var ip = socket.handshake.headers['x-forward-for'] || socket.handshake.address.address;
+        Poll.findById(data.poll_id, function(err, poll) {
+            var choice = poll.choices.id(data.choice);
+            choice.votes.push({ip: ip});
+            poll.save(function(err, doc) {
+                var theDoc = {
+                    question: doc.question,
+                    _id: doc._id,
+                    choices: doc.choices,
+                    userVoted: false,
+                    totalVotes: 0
+                };
+                for(var i = 0, ln = doc.choices.length; i < ln; i++) {
+                    var choice = doc.choices[i];
+                    for(var j = 0, jLn = choice.votes.length; j < jLn; j++) {
+                        var vote = choice.votes[j];
+                        theDoc.totalVotes++;
+                        theDoc.ip = ip;
+                        if (vote.ip === ip) {
+                            theDoc.userVoted = true;
+                            theDoc.userChoice = { _id: choice._id, text: choice.text };
+                        }
+                    }
+                }
+                socket.emit('myvote', theDoc);
+                socket.broadcast.emit('vote', theDoc);
+            });
+        });
+    });
+});
+
+server.listen(app.get('port'), function(){
+    console.log('Express server listening on port ' + app.get('port'));
+});
 
 /* View the all polls */
 app.get('/polls/all', function (req, res) {
@@ -87,6 +131,41 @@ app.post('/polls', function (req, res) {
 		}
 	});
 });
+
+/* Vote a poll's choice */
+// app.post('/vote', function(socket) {
+// 	//Socket API for saving a vote
+// 	socket.on('send:vote', function (data) {
+// 		var ip = socket.handshake.headers['x-forward-for'] || socket.handshake.address.address;
+// 		Poll.findById(data.poll._id, function(err, poll) {
+// 			var choice = poll.choices.id(data.choice);
+// 			choice.votes.push({ip: ip});
+// 			poll.save(function(err, doc) {
+// 				var theDoc = {
+// 					question: doc.question,
+// 					_id: doc._id,
+// 					choices: doc.choices,
+// 					userVoted: false,
+// 					totalVotes: 0
+// 				};
+// 				for(var i = 0, ln = doc.choices.length; i < ln; i++) {
+// 					var choice = doc.choices[i];
+// 					for(var j = 0, jLn = choice.votes.length; j < jLn; j++) {
+// 						var vote = choice.votes[j];
+// 						theDoc.totalVotes++;
+// 						theDoc.ip = ip;
+// 						if (vote.ip === ip) {
+// 							theDoc.userVoted = true;
+// 							theDoc.userChoice = { _id: choice._id, text: choice.text };
+// 						}
+// 					}
+// 				}
+// 				socket.emit('myvote', theDoc);
+// 				socket.broadcast.emit('vote', theDoc);
+// 			});
+// 		});
+//     });
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
