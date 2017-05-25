@@ -35,7 +35,6 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function (socket) {
-    console.log('Socket succesfully connected with id: '+socket.id);   // for debug
     //Socket API for saving a vote
     socket.on('send:vote', function (data) {
         var ip = socket.handshake.headers['x-forward-for'] || socket.handshake.address.address;

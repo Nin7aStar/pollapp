@@ -58,7 +58,6 @@ pollApp.controller('PollItemCtrl', [
 			}
 		});
 		$scope.vote = function () {
-			console.log('vote message');	// for debug
 			var pollId = $scope.poll._id,
 				choiceId = $scope.poll.userVote;
 			if (choiceId) {
